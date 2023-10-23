@@ -21,16 +21,12 @@ public class TestMotor extends LinearOpMode {
         mecanum.telemetry = this.telemetry;
         mecanum.initialize();
 
-
-
-
         waitForStart();
         //forward
         distance = 51;
         mecanum.encoderDrive(0.8,distance,distance,distance,distance,2);
         sleep(2000);
         mecanum.encoderDrive(0.8,-distance,-distance,-distance,-distance,2);
-
 
 
 }}
