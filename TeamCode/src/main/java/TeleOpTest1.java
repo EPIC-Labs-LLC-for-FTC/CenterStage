@@ -59,32 +59,35 @@ public class TeleOpTest1 extends LinearOpMode {
         boolean left_bumper = gamepad2.left_bumper;
 
         if (right_bumper) {
-            spinTake.setPower(-1);
-        } else if (left_bumper) {
+            spinTake.setPower(-0.8);
+        } else {
             spinTake.setPower(0);
         }
+        if (left_bumper){
+            spinTake.setPower(0.8);
+        }else {
+            spinTake.setPower(0);
+        }
+
 
     }
 
     public void armControl() {
-
-        double joystickInput = gamepad2.right_stick_y;
         boolean right_bumper = gamepad1.right_bumper;
 
         if (right_bumper) {
-            arm.setPower(-0.3);
+            arm.setPower(-1);
+        }else {
+            arm.setPower(0);
+        }
+        if(gamepad1.left_bumper){
+            arm.setPower(1);
+        }else {
+            arm.setPower(0);
         }
 
-        if (joystickInput > 0.1 || joystickInput < -0.1) {
-            targetPosition += (int) (joystickInput * 100);
-            targetPosition = Range.clip(targetPosition, 0, arm.getCurrentPosition());
-        }
-            int currentPosition = arm.getCurrentPosition();
-            double power = (targetPosition - currentPosition) * 0.001;
-            arm.setPower(power);
 
         telemetry.addData("Target Position", targetPosition);
-        telemetry.addData("Current Position", currentPosition);
         telemetry.update();
     }
     public void driverControl() {
@@ -140,6 +143,7 @@ public class TeleOpTest1 extends LinearOpMode {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinTake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -153,7 +157,7 @@ public class TeleOpTest1 extends LinearOpMode {
                 armControl();
                 spinnerControl();
                 doorContorl();
-                wristConrtol();
+//                wristConrtol();
             }
         }
     }
