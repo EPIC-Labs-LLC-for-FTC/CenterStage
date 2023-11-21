@@ -12,7 +12,6 @@ public class SanjeevMECANUM {
     public DcMotorEx rightFront = null;
     public DcMotorEx leftBack = null;
     public DcMotorEx rightBack = null;
-    public DcMotorEx spinTake = null;
 
 
     double wheelCircumference = (3.77953 * Math.PI);
@@ -64,6 +63,11 @@ public class SanjeevMECANUM {
     }
 
     public void initialize() {
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+        rightFront.setPower(0);
+        leftFront.setPower(0);
+
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -71,6 +75,11 @@ public class SanjeevMECANUM {
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

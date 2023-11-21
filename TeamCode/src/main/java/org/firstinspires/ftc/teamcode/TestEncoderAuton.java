@@ -141,7 +141,6 @@ public class TestEncoderAuton extends LinearOpMode {
 
 
 
-
     }
     private void raiseSlide(int index){
         slide1.setPower(0.8);
