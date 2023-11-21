@@ -74,6 +74,7 @@ public class TeleOpTest1 extends LinearOpMode {
 
     public void armControl() {
         boolean right_bumper = gamepad1.right_bumper;
+        targetPosition = arm.getCurrentPosition();
 
         if (right_bumper) {
             arm.setPower(-1);
@@ -148,7 +149,6 @@ public class TeleOpTest1 extends LinearOpMode {
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        targetPosition = arm.getCurrentPosition();
 
         waitForStart();
         if (opModeIsActive()) {
