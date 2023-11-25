@@ -1,13 +1,14 @@
+package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOpTest1")
-public class TeleOpTest1 extends LinearOpMode {
+@TeleOp(name="New TeleOp Test")
+public class NewTeleOpTest extends LinearOpMode {
 
     //Define motors
     public DcMotorEx leftFront = null;
@@ -27,13 +28,14 @@ public class TeleOpTest1 extends LinearOpMode {
     public void doorContorl() {
 
         boolean y = gamepad2.y;
+        boolean x = gamepad2.x;
         boolean b = gamepad2.b;
-        double doorClose = 1;
-        double doorOpen = 0.4;
+        double doorClose = 0.4;
+        double doorOpen = 1;
 
-        if (y) {
+        if (x) {
             door.setPosition(doorClose);
-        } else if (b) {
+        } else if (y) {
             door.setPosition(doorOpen);
         }
 
@@ -62,35 +64,65 @@ public class TeleOpTest1 extends LinearOpMode {
 
 
         if (gamepad2.dpad_left) {
+            arm.setTargetPosition(0);
+            sleep(500);
+            wrist.setDirection(Servo.Direction.REVERSE);
             wrist.setPosition(0);
         }
 
         if (gamepad2.dpad_down){
-            wrist.setDirection(Servo.Direction.REVERSE);
-            wrist.setPosition(1);
-        }
-
-        if( gamepad2.right_trigger > 0.5){
-            arm.setTargetPosition(-1650);
+            //wrist.setDirection(Servo.Direction.REVERSE);
+            //wrist.setPosition(1);
+            arm.setTargetPosition(-100);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setPower(-1);
-        }
-
-        if( gamepad2.left_trigger > 0.5){
-            arm.setTargetPosition(90);
+            sleep(500);
+            wrist.setDirection(Servo.Direction.REVERSE);
+            wrist.setPosition(0.2);
+            sleep(500);
+            //door.setPosition(1);
+            //sleep(500);
+            arm.setTargetPosition(0);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setPower(1);
         }
 
+        if( gamepad2.right_trigger > 0.5){
+            //arm.setTargetPosition(-1650);
+            //arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //arm.setPower(-1);
+        }
+
+        if( gamepad2.left_trigger > 0.5){
+//            arm.setTargetPosition(90);
+//            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            arm.setPower(1);
+        }
+
         if (gamepad2.dpad_right) {
-            arm.setTargetPosition(-50);
+            wrist.setPosition(0);
+            sleep(500);
+            arm.setTargetPosition(0);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(-1);
+            arm.setPower(1);
+                    }
+
+        if (gamepad2.a) {
+            arm.setPower(1);
+        }else{
+            arm.setPower(0);
         }
 
         if( gamepad2.dpad_up){
+            arm.setTargetPosition(-1650);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm.setPower(-1);
+            sleep(500);
             wrist.setDirection(Servo.Direction.REVERSE);
-            wrist.setPosition(0.2);
+            wrist.setPosition(1);
+            sleep(500);
+//            wrist.setDirection(Servo.Direction.REVERSE);
+//            wrist.setPosition(0.2);
         }
         telemetry.addData("Target Position", targetPosition);
         telemetry.update();

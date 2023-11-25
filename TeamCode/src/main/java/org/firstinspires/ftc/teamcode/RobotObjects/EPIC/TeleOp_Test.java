@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -46,6 +48,7 @@ public class TeleOp_Test extends LinearOpMode {
         DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
+        Servo door = hardwareMap.get(Servo.class,"door");
 
         waitForStart();
 
@@ -64,7 +67,10 @@ public class TeleOp_Test extends LinearOpMode {
             boolean x = gamepad1.x;
             boolean y = gamepad1.y;
             boolean a = gamepad1.a;
-
+            if (gamepad2.b){door.setPosition(0);
+            if (gamepad2.a){
+                door.setPosition(1);
+            }
             if (a) {
                 speed = 0.6;
             } else if (b) {
@@ -74,7 +80,6 @@ public class TeleOp_Test extends LinearOpMode {
             } else if (y){
                 speed = 1.0;
             }
-
             if (Math.abs(lefty) > Math.abs(leftx)) {
                 rightFront.setPower(lefty * speed);
                 leftFront.setPower(-lefty * speed);
@@ -106,5 +111,5 @@ public class TeleOp_Test extends LinearOpMode {
             telemetry.update();
         }
     }
-}
+}}
 
