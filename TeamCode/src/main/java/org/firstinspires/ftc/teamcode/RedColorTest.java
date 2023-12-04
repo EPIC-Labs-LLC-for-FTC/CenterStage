@@ -17,8 +17,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@TeleOp (name = "BlueAuto", group = "CameraTests")
-public class BlueColorTest extends LinearOpMode {
+@TeleOp (name = "RedColorTest", group = "CameraTests")
+public class RedColorTest extends LinearOpMode {
 
     public OpenCvCamera webcam;
 
@@ -67,7 +67,7 @@ class BlueRightPipe1 extends OpenCvPipeline {
     static final Rect BRight = new Rect(
             new Point(480, 180),
             new Point(640, 260));
-    static final double PERCENT_COLOR_THRESHOLD = 0.02;
+    static final double PERCENT_COLOR_THRESHOLD = 0.05;
     public BlueRightPipe1(Telemetry t) {telemetry = t;}
 
     @Override
