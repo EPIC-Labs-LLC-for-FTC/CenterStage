@@ -17,7 +17,7 @@ public class Teleop extends LinearOpMode {
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
 
 
-        frontRight.setPower(gamepad1.left_stick_y-gamepad1.right_stick_x);
+        frontRight.setPower(gamepad2.left_stick_y-gamepad1.right_stick_x);
         frontLeft .setPower(gamepad1.left_stick_y+gamepad1.right_stick_x);
         backRight.setPower(gamepad1.left_stick_y-gamepad1.right_stick_x);
         backLeft.setPower(gamepad1.left_stick_y+gamepad1.right_stick_x);
