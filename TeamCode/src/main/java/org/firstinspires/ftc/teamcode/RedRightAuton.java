@@ -19,11 +19,11 @@ public class RedRightAuton extends LinearOpMode {
         wheels.initialize();
         waitForStart();
 //        sleep(2000);
-        double distance = -40;
+        double distance = 40;
         //wheels.leftErrorAdjustment = 0.75;
         double diff = 0;
         //Left Straf
-        wheels.encoderDrive(0.6,   -distance, distance, distance, -distance, 2);
+        wheels.encoderDrive(0.6,   distance, -distance, -distance, distance, 2);
        while(opModeIsActive()){
 
             }
