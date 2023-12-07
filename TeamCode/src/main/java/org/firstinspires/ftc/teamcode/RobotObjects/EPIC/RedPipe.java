@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.RobotObjects.EPIC;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -17,17 +15,26 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-@TeleOp (name = "RedColorTest", group = "CameraTests")
-public class RedColorTest extends LinearOpMode {
+public class RedPipe extends OpenCvPipeline {
+    Telemetry telemetry;
+    int correctlocation = 3;
+    Mat mat = new Mat();
 
     public OpenCvCamera webcam;
 
+    public enum Location{
+        RIGHT,
+        MIDDLE,
+        LEFT
+    }
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+    public void map(HardwareMap hardwareMap){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        RedPipeline scanner = new RedPipeline(telemetry);
+    }
+
+    public void initialize(){
+        RedPipe scanner = new RedPipe(telemetry);
         webcam.setPipeline(scanner);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -44,21 +51,6 @@ public class RedColorTest extends LinearOpMode {
 
             }
         });
-
-        waitForStart();
-        while (opModeIsActive()) {
-            FtcDashboard.getInstance().startCameraStream(webcam, 120);
-        }
-    }
-}
-class RedPipeline extends OpenCvPipeline {
-    Telemetry telemetry;
-    int correctlocation = 3;
-    Mat mat = new Mat();
-    public enum Location{
-        RIGHT,
-        MIDDLE,
-        LEFT
     }
     private Location location;
     static final Rect BMiddle = new Rect(
@@ -68,7 +60,7 @@ class RedPipeline extends OpenCvPipeline {
             new Point(480, 180),
             new Point(640, 260));
     static final double PERCENT_COLOR_THRESHOLD = 0.05;
-    public RedPipeline(Telemetry t) {telemetry = t;}
+    public RedPipe(Telemetry t) {telemetry = t;}
 
     @Override
     public Mat processFrame(Mat input) {
