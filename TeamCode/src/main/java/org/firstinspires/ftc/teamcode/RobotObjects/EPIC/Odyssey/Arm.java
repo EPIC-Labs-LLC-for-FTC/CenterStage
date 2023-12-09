@@ -20,11 +20,11 @@ public class Arm {
 
     public double power = 0.0;
 
-    public int homePos = 69;
+    public int homePos = 169;
 
     public int deliverPos = 1225;
 
-    public int pickUpPos = 269;
+    public int pickUpPos = 69;
 
     public Arm(HardwareMap hardwareMap) {
         arm = hardwareMap.get(DcMotorEx.class, "arm");

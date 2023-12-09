@@ -25,7 +25,7 @@ public class Wrist {
     }
 
     public void initialize(){
-
+        wrist.setPosition(0);
     }
 
     public void setDirection(Servo.Direction direction) {
