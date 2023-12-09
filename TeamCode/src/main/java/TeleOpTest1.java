@@ -62,6 +62,7 @@ public class TeleOpTest1 extends LinearOpMode {
 
 
         if (gamepad2.dpad_left) {
+            wrist.setDirection(Servo.Direction.REVERSE);
             wrist.setPosition(0);
         }
 
@@ -130,8 +131,8 @@ public class TeleOpTest1 extends LinearOpMode {
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rightRear");
+        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         spinTake = hardwareMap.get(DcMotorEx.class, "spinTake");
         door = hardwareMap.get(Servo.class,"door");
         wrist = hardwareMap.get(Servo.class, "wrist");
