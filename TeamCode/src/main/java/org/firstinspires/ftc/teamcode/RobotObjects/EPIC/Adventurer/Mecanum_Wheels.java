@@ -40,10 +40,10 @@ public class Mecanum_Wheels {
     public Telemetry telemetry;
 
     public Mecanum_Wheels(HardwareMap hardwareMap) {
-        frontright = hardwareMap.get(DcMotorEx.class,"rightFront");
-        frontleft = hardwareMap.get(DcMotorEx.class,"leftFront");
-        backright = hardwareMap.get(DcMotorEx.class,"rightBack");
-        backleft = hardwareMap.get(DcMotorEx.class,"leftBack");
+        frontright = hardwareMap.get(DcMotorEx.class,"frontRight");
+        frontleft = hardwareMap.get(DcMotorEx.class,"frontLeft");
+        backright = hardwareMap.get(DcMotorEx.class,"backRight");
+        backleft = hardwareMap.get(DcMotorEx.class,"backLeft");
 
         //xRail = hardwareMap.get(DcMotorEx.class, "xRail");
     }
@@ -57,8 +57,8 @@ public class Mecanum_Wheels {
         backleft.setPower(reset);
         backright.setPower(reset);
 
-        backright.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontright.setDirection(DcMotorSimple.Direction.FORWARD);
+        backright.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontright.setDirection(DcMotorSimple.Direction.REVERSE);
 
         backleft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
