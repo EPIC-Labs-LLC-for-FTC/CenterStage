@@ -29,8 +29,10 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
         waitForStart();
 
         double distance = 5.25;
-        switch (pipeline.getLocation()){
-            case LEFT:
+        String location = pipeline.getLocation();
+        sleep(500);
+        switch (location){
+            case "Left":
                 //Auton code if the camera detects the object to the left
                 wheels.encoderDrive(0.6,   -distance, distance, -distance, distance, 2);
                 distance = 24;
@@ -44,11 +46,11 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
                 wheels.encoderDrive(0.6,   -distance, distance, -distance, distance, 2);
                 break;
 
-            case MIDDLE:
+            case "Middle":
                 //Auton code for middle object
                 break;
 
-            case RIGHT:
+            case "Right":
                 //Auton code for right object
                 break;
         }

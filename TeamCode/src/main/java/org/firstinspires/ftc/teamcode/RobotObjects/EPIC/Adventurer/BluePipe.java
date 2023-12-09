@@ -54,11 +54,11 @@ public class BluePipe extends OpenCvPipeline {
     }
     private Location location;
     static final Rect BMiddle = new Rect(
-            new Point(120, 170),
-            new Point(450, 220));
+            new Point(0, 240),
+            new Point(120, 380));
     static final Rect BRight = new Rect(
-            new Point(480, 180),
-            new Point(640, 260));
+            new Point(400, 300),
+            new Point(520, 420));
     static final double PERCENT_COLOR_THRESHOLD = 0.05;
     public BluePipe(Telemetry t) {telemetry = t;}
 
@@ -111,7 +111,12 @@ public class BluePipe extends OpenCvPipeline {
         Imgproc.rectangle(mat,BMiddle, location == Location.MIDDLE? True :False);
         return mat;
     }
-    public Location getLocation(){
-        return location;
+    public String getLocation(){
+        if (location == Location.RIGHT)
+            return "Right";
+        else if (location == Location.MIDDLE)
+            return "Middle";
+        else
+            return "Left";
     }
 }
