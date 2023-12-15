@@ -63,7 +63,7 @@ public class ExpeditionTeleOp extends LinearOpMode {
 
     private void cascadingArm() {
 //        if(Lift1.getCurrentPosition() = 0 && Lift2.getCurrentPosition() = 0.0) {
-        if(gamepad2.x) {
+        if(gamepad2.a) {
             resetLift();
         } else if (gamepad2.y) {
             arm1.setTargetPosition(1000);

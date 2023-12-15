@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="AdventurerTeleOp")
+@TeleOp()
 public class AdventurerTeleOp extends LinearOpMode {
 
     //Define motors
@@ -58,6 +59,10 @@ public class AdventurerTeleOp extends LinearOpMode {
             spinTake.setPower(1);
         } else if (gamepad2.left_stick_y < 0) {
             spinTake.setPower(-1);
+        }
+        if (gamepad2.x) {
+            servo.setDirection(Servo.Direction.FORWARD);
+            servo.setPosition(1);
         }
 
     }

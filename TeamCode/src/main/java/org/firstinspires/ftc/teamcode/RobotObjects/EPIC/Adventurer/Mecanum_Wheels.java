@@ -72,6 +72,15 @@ public class Mecanum_Wheels {
         {
 
 
+
+            backleft.setDirection(DcMotorSimple.Direction.REVERSE);
+            frontleft.setDirection(DcMotorSimple.Direction.REVERSE);
+            frontright.setDirection(DcMotorSimple.Direction.FORWARD
+            );
+            backright.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+
             frontleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             backleft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -167,6 +176,32 @@ public class Mecanum_Wheels {
         frontleft.setPower((-lefty + rightx + leftx)*leftErrorAdjustment);
         backright.setPower((-lefty - rightx + leftx)*rightErrorAdjustment);
         backleft.setPower((-lefty + rightx - leftx)*leftErrorAdjustment);
+
+    }
+
+    public void moveFrontLeft(double lefty) {
+        frontleft.setPower((lefty)*leftErrorAdjustment);
+        telemetry.addData("motor power", frontleft.getPower());
+        telemetry.update();
+    }
+
+    public void moveFrontRight(double lefty) {
+        frontright.setPower((lefty) * leftErrorAdjustment);
+        telemetry.addData("motor power", frontright.getPower());
+        telemetry.update();
+    }
+
+    public void moveBackLeft(double lefty) {
+        backleft.setPower((lefty)*leftErrorAdjustment);
+        telemetry.addData("motor power", backleft.getPower());
+        telemetry.update();
+
+    }
+
+    public void moveBackRight(double lefty) {
+        backright.setPower((lefty) * leftErrorAdjustment);
+        telemetry.addData("motor power", backright.getPower());
+        telemetry.update();
 
     }
 }

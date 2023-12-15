@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Adventurer.BluePipe;
@@ -29,12 +30,12 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
         waitForStart();
 
         double distance = 5.25;
-        String location = pipeline.getLocation();
+        String location = "Left"; // pipeline.getLocation();
         sleep(500);
         switch (location){
             case "Left":
                 //Auton code if the camera detects the object to the left
-                wheels.encoderDrive(0.6,   -distance, distance, -distance, distance, 2);
+                wheels.encoderDrive(0.6,   -distance, distance, distance, -distance, 2);
                 distance = 24;
                 wheels.encoderDrive(0.6,   distance, distance, distance, distance, 2);
                 spinTake.setPower(-1);
@@ -42,8 +43,8 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
                 spinTake.setPower(0);
                 distance = 22;
                 wheels.encoderDrive(0.6,   -distance, -distance, -distance, -distance, 2);
-                distance = 36;
-                wheels.encoderDrive(0.6,   -distance, distance, -distance, distance, 2);
+                distance = 40;
+                wheels.encoderDrive(0.6,   -distance, distance, distance, -distance, 2);
                 break;
 
             case "Middle":
