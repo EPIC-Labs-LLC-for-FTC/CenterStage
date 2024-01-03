@@ -16,7 +16,7 @@ public class AdventurerTeleOp extends LinearOpMode {
     public DcMotorEx rightFront = null;
     public DcMotorEx leftBack = null;
     public DcMotorEx  rightBack = null;
-    public DcMotorEx spinTake = null;
+   // public DcMotorEx spintake = null;
     public DcMotorEx arm = null;
 
     public Servo servo;
@@ -65,26 +65,22 @@ public class AdventurerTeleOp extends LinearOpMode {
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setPower(1);
         } else if(gamepad2.y) {
-            arm.setTargetPosition(2000);
+            arm.setTargetPosition(3500);
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setPower(1);
         }
 
     }
 
-    public void spinnerControl() {
+    public void droneControl() {
 
-        if (gamepad2.left_stick_y > 0) {
-            spinTake.setPower(1);
-        } else if (gamepad2.left_stick_y < 0) {
-            spinTake.setPower(-1);
-        }
         if (gamepad2.dpad_up) {
             servo.setDirection(Servo.Direction.FORWARD);
             servo.setPosition(1);
         }
 
     }
+
 
     @Override
     public void runOpMode() {
@@ -93,7 +89,6 @@ public class AdventurerTeleOp extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotorEx.class, "frontRight");
         leftBack = hardwareMap.get(DcMotorEx.class, "backLeft");
         rightBack = hardwareMap.get(DcMotorEx.class, "backRight");
-        spinTake = hardwareMap.get(DcMotorEx.class, "spin");
         servo=hardwareMap.get(Servo.class,"servo");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
 
@@ -103,7 +98,6 @@ public class AdventurerTeleOp extends LinearOpMode {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        spinTake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -120,6 +114,7 @@ public class AdventurerTeleOp extends LinearOpMode {
 
                 driverControl();
                 armLift();
+                droneControl();
 
             }
         }

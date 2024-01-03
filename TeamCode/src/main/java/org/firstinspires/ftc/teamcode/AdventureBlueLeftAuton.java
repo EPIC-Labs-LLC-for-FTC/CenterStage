@@ -14,11 +14,11 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
 //    OpenCvCamera webcam;
 //    Scanner scanner;
 
-    public DcMotorEx spinTake = null;
+    // public DcMotorEx spinTake = null;
     @Override
     public void runOpMode() throws InterruptedException {
 
-        spinTake = hardwareMap.get(DcMotorEx.class, "spin");
+        //spinTake = hardwareMap.get(DcMotorEx.class, "spin");
         BluePipe pipeline = new BluePipe(telemetry);
         pipeline.map(hardwareMap);
         pipeline.initialize();
@@ -38,9 +38,9 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
                 wheels.encoderDrive(0.6,   -distance, distance, distance, -distance, 2);
                 distance = 24;
                 wheels.encoderDrive(0.6,   distance, distance, distance, distance, 2);
-                spinTake.setPower(-1);
-                sleep(1000);
-                spinTake.setPower(0);
+                //spinTake.setPower(-1);
+                //sleep(1000);
+                //spinTake.setPower(0);
                 distance = 22;
                 wheels.encoderDrive(0.6,   -distance, -distance, -distance, -distance, 2);
                 distance = 40;
@@ -61,12 +61,11 @@ public class AdventureBlueLeftAuton extends LinearOpMode {
         //double diff = 0;
         //Left Straf
         //wheels.encoderDrive(0.6,   -distance, distance, -distance, distance, 2);
-       while(opModeIsActive()){
-
-            }
+        while(opModeIsActive()){
 
         }
 
-
     }
 
+
+}
