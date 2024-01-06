@@ -66,7 +66,7 @@ public class Wrist {
     }
 
     public void pickUp() {
-        wrist.setPosition(0.2);
+        wrist.setPosition(0.15);
         parent.sleep(250);
 
     }

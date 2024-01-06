@@ -6,10 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Door;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Launch_Control;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Mecanum_Wheels;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Spinner;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Wrist;
@@ -23,6 +25,9 @@ public class OdysseyTeleop extends LinearOpMode {
     Arm arm =  null;//new Arm(hardwareMap);
     Wrist wrist =  null;//new Wrist(hardwareMap);
     Door door =  null;//new Door(hardwareMap);
+
+    public DcMotorEx hang = null;
+    public Servo air = null;
 
    //initialize gamepad1 variables
     double lefty1 = 0.0;
@@ -43,6 +48,8 @@ public class OdysseyTeleop extends LinearOpMode {
     boolean du1 = false;
     boolean dr1 = false;
     boolean dd1 = false;
+
+
 
     float rt1 = 0;
     float lt1 = 0;
@@ -91,7 +98,7 @@ public class OdysseyTeleop extends LinearOpMode {
         spinner.parent = this;
         spinner.telemetry = this.telemetry;
         spinner.initialize();
-        spinner.power = 0.6; //value should be updated after initialize
+        spinner.power = 1; //value should be updated after initialize
 
         //Initialize arm
         arm.parent = this;
@@ -110,8 +117,11 @@ public class OdysseyTeleop extends LinearOpMode {
         door.telemetry = this.telemetry;
         door.initialize();
 
+        hang = hardwareMap.get(DcMotorEx.class, "hang");
+        hang.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        hang.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-
+        air = hardwareMap.get(Servo.class, "air");
 
         waitForStart();
         if (opModeIsActive()) {
@@ -119,6 +129,7 @@ public class OdysseyTeleop extends LinearOpMode {
 
                 readGamePad1();
                 readGamePad2();
+
 
                 if(rb1){
                     spinner.forward();
@@ -128,7 +139,7 @@ public class OdysseyTeleop extends LinearOpMode {
                 }
                 spinner.stop();
                 if(dl2){
-                    arm.gotoHome();
+//                    arm.gotoHome();
                     wrist.gotoHome();
                 }
                 else if(du2){
@@ -136,13 +147,24 @@ public class OdysseyTeleop extends LinearOpMode {
                     wrist.deliver();
                 }
                 else if(dd2){
-                    arm.pickUp();
+                    arm.gotoHome();
+                    wrist.pickUp();
+
+                }
+
+                if (gamepad1.dpad_left){
+                    air.setPosition(1);
+                }
+
+
+                if (gamepad1.dpad_right){
+                    air.setPosition(0);
                 }
 
                 if(du1){
                     wrist.decrement(0.05);
                 }
-                else if(dd1){
+                if(dd1){
                     wrist.increment(0.025);
                 }
 
@@ -160,13 +182,31 @@ public class OdysseyTeleop extends LinearOpMode {
                     door.open();
                 }
 
+                if(y1){
+                    hang.setTargetPosition(2200);
+                    hang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    hang.setPower(1);
+                }
+
+                if(x1){
+                    hang.setTargetPosition(-230);
+                    hang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    hang.setPower(-1);
+                }
+
+                if (gamepad1.right_trigger > 0.1){
+                    hang.setPower(1);
+                }else {
+                    hang.setPower(0);
+                }
+
+                if (gamepad1.left_trigger > 0.1){
+                    hang.setPower(-1);
+                }else {
+                    hang.setPower(0);
+                }
 
 
-
-//                driverControl();
-//                armControl();
-//                spinnerControl();
-//                doorContorl();
 
 
                 wheels.move(lefty1,righty1,leftx1,rightx1);
@@ -180,6 +220,7 @@ public class OdysseyTeleop extends LinearOpMode {
                 telemetry.addData("wrist", "%.2f", wrist.wrist.getPosition());
 
                 telemetry.addData("arm", "%.2f", arm.getCurrentPosition());
+                telemetry.addData("HangPosition", hang.getCurrentPosition());
                 telemetry.update();
             }
         }

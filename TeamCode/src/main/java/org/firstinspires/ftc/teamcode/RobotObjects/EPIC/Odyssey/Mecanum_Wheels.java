@@ -21,10 +21,10 @@ public class Mecanum_Wheels {
 
     public boolean IsAutonomous = false;
 
-    public double leftErrorAdjustment = 1.0;
-    public double rightErrorAdjustment = 1.0;
-    public double backRightAdjustment = 1.0;
-    public double backLeftAdjustment = 1.0;
+    public double leftErrorAdjustment = 0.7;
+    public double rightErrorAdjustment = 0.7;
+    public double backRightAdjustment = 0.7;
+    public double backLeftAdjustment = 0.7;
 
     public double mecanumWheelCircumference = 12; //inches
     public double omniWheelCircumference = 12; //inches

@@ -7,84 +7,93 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name="New TeleOp Test", group="test")
-public class NewTeleOpTest extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Launch_Control;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Spinner;
+
+@TeleOp(name="Odyssey_v2")
+public class Odyssey_v2 extends LinearOpMode {
 
     public DcMotorEx leftFront = null;
-
     public DcMotorEx rightFront = null;
     public DcMotorEx leftBack = null;
-    public DcMotorEx  rightBack = null;
-    public DcMotorEx slide = null;
+    public DcMotorEx rightBack = null;
     public DcMotorEx spinTake = null;
-    public Servo wrist = null;
-    public Servo arm1 = null;
-    public Servo arm2 = null;
-    public Servo claw1 = null;
-    public Servo claw2 = null;
+
+    Slide_Control Slide_Control = null;
+    Arm_Claw_Control Arm_Claw_Control = null;
+    Launch_Control Launch_Control = null;
+
     double movement;
     double rotation;
     double strafe;
 
-    public void spinnerControl() {
+    public void fullControl(){
 
         if (gamepad1.right_bumper) {
             spinTake.setPower(1);
         } else {
             spinTake.setPower(0);
         }
-
         if (gamepad1.left_bumper){
             spinTake.setPower(-1);
         }else {
             spinTake.setPower(0);
         }
 
-    }
-
-    public void SlideAndArmControl() {
-
-        if (gamepad2.right_bumper){
-            slide.setPower(1);
-        }else{
-            slide.setPower(0);
+        if (gamepad1.dpad_up){
+            Slide_Control.increment(+20);
+        }
+        if (gamepad1.dpad_down){
+            Slide_Control.increment(-20);
         }
 
-        if (gamepad2.left_bumper){
-            slide.setPower(-1);
-        }else{
-            slide.setPower(0);
+        if (gamepad1.dpad_right){
+            Arm_Claw_Control.arm1Increment(0.01);
+            Arm_Claw_Control.arm2Increment(0.01);
         }
+        if (gamepad1.dpad_left){
+            Arm_Claw_Control.arm1Decrement(0.01);
+            Arm_Claw_Control.arm2Decrement(0.01);
+        }
+
+        if (gamepad1.a){
+            Arm_Claw_Control.wristIncrement(0.01);
+        }
+        if (gamepad1.b){
+            Arm_Claw_Control.wristDecrement(0.01);
+        }
+        
 
         if (gamepad2.dpad_left){
-            arm1.setPosition(0);
-            arm2.setPosition(1);
+            Arm_Claw_Control.armMid();
         }
 
-        if (gamepad2.dpad_right){
-            arm1.setPosition(1);
-            arm2.setPosition(0);
+        if (gamepad2.right_trigger > 0.2){
+            Arm_Claw_Control.clawClose();
         }
-
-        if (gamepad2.dpad_up){
-            wrist.setPosition(0);
-        }
-
-        if (gamepad2.dpad_down){
-            wrist.setPosition(0.5);
-        }
-
-        if (gamepad2.a){
-            claw1.setPosition(1);
-            claw2.setPosition(0);
+        if (gamepad2.left_trigger > 0.2){
+            Arm_Claw_Control.clawOpen();
         }
 
         if (gamepad2.b){
-            claw1.setPosition(0);
-            claw2.setPosition(1);
+            Arm_Claw_Control.wristHorizontal();
+        }
+        if (gamepad2.a){
+            Arm_Claw_Control.wristVertical1();
+        }
+        if (gamepad2.y){
+            Arm_Claw_Control.wristVertical2();
         }
 
-        telemetry.addData("slidePosition", slide.getCurrentPosition());
+
+        telemetry.addData("wrist", Arm_Claw_Control.wrist.getPosition());
+        telemetry.addData("arm1", Arm_Claw_Control.arm1.getPosition());
+        telemetry.addData("arm2", Arm_Claw_Control.arm2.getPosition());
+        telemetry.addData("slide", Slide_Control.slide.getCurrentPosition());
+        telemetry.update();
+
     }
 
     public void driverControl() {
@@ -124,35 +133,42 @@ public class NewTeleOpTest extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         spinTake = hardwareMap.get(DcMotorEx.class, "spinTake");
-        slide = hardwareMap.get(DcMotorEx.class, "slide");
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        arm1 = hardwareMap.get(Servo.class, "arm1");
-        arm2 = hardwareMap.get(Servo.class, "arm2");
-        claw1 = hardwareMap.get(Servo.class, "claw1");
-        claw2 = hardwareMap.get(Servo.class, "claw2");
+
+        Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
+        Slide_Control = new Slide_Control(hardwareMap);
+        Launch_Control = new Launch_Control(hardwareMap);
 
         leftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        slide.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinTake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        Slide_Control.parent = this;
+        Slide_Control.telemetry = this.telemetry;
+        Slide_Control.initialize();
+        Slide_Control.power = 0.8;
+
+        Arm_Claw_Control.parent = this;
+        Arm_Claw_Control.telemetry = this.telemetry;
+        Arm_Claw_Control.initialize();
+
+        Launch_Control.parent = this;
+        Launch_Control.telemetry = this.telemetry;
 
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 driverControl();
-                SlideAndArmControl();
-                spinnerControl();
+                fullControl();
             }
         }
     }

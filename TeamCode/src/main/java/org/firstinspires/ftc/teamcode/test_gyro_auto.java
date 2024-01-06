@@ -10,10 +10,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Door;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Wrist;
+
 @Autonomous(name="Robot: test_gyro_auto", group="test")
 public class test_gyro_auto extends LinearOpMode {
 
     public DcMotor leftFront = null;
+
     public DcMotor rightFront = null;
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
@@ -81,16 +86,41 @@ public class test_gyro_auto extends LinearOpMode {
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        driveStraight(DRIVE_SPEED, 15, 0);
 
-        strafe(DRIVE_SPEED, 15, 0);
+        strafe(DRIVE_SPEED, 30, 0);
 
-        turnToHeading( TURN_SPEED, -45);
-        holdHeading( TURN_SPEED, -45, 0.3);
-
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(100);
+//        door.close();
+//
+//
+//        wrist.gotoHome();
+//
+//        driveStraight(DRIVE_SPEED, 15, 0);
+//
+//        arm.deliver();
+//        wrist.deliver();
+//
+//
+//        turnToHeading( TURN_SPEED, 90);
+//        holdHeading( TURN_SPEED, 90, 0.3);
+//
+//        driveStraight(DRIVE_SPEED, -25, 0);
+//        sleep(200);
+//
+//        door.open();
+//        sleep(500);
+//
+//        driveStraight(DRIVE_SPEED, 5, 0);
+//        sleep(200);
+//
+//        strafe(DRIVE_SPEED, 10, 0);
+//        sleep(200);
+//
+//        driveStraight(DRIVE_SPEED, -20, 0);
+//        sleep(500);
+//
+//        telemetry.addData("Path", "Complete");
+//        telemetry.update();
+//        sleep(100);
     }
     public void driveStraight(double maxDriveSpeed, double distance, double heading) {
         if (opModeIsActive()) {

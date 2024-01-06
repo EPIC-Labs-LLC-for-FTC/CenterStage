@@ -25,7 +25,7 @@ public class Spinner {
     }
 
     public void initialize(){
-        power = 0.6;
+        power = 1;
     }
 
     public void forward(){

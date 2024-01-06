@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -20,9 +21,9 @@ public class Arm {
 
     public double power = 0.0;
 
-    public int homePos = 169;
+    public int homePos = 7;
 
-    public int deliverPos = 1225;
+    public int deliverPos = 1245;
 
     public int pickUpPos = 69;
 
@@ -31,6 +32,7 @@ public class Arm {
     }
 
     public void initialize() {
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         power = 0.6;
