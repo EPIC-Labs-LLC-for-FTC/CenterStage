@@ -20,6 +20,9 @@ public class Odyssey_v2 extends LinearOpMode {
     public DcMotorEx leftBack = null;
     public DcMotorEx rightBack = null;
     public DcMotorEx spinTake = null;
+//    public DcMotorEx hang1 = null;
+//    public DcMotorEx hang2 = null;
+
 
     Slide_Control Slide_Control = null;
     Arm_Claw_Control Arm_Claw_Control = null;
@@ -42,32 +45,38 @@ public class Odyssey_v2 extends LinearOpMode {
             spinTake.setPower(0);
         }
 
-        if (gamepad1.dpad_up){
-            Slide_Control.increment(+20);
+        if (gamepad2.left_bumper){
+            Slide_Control.increment(+100);
         }
-        if (gamepad1.dpad_down){
-            Slide_Control.increment(-20);
-        }
-
-        if (gamepad1.dpad_right){
-            Arm_Claw_Control.arm1Increment(0.01);
-            Arm_Claw_Control.arm2Increment(0.01);
-        }
-        if (gamepad1.dpad_left){
-            Arm_Claw_Control.arm1Decrement(0.01);
-            Arm_Claw_Control.arm2Decrement(0.01);
+        if (gamepad2.right_bumper){
+            Slide_Control.increment(-100);
         }
 
-        if (gamepad1.a){
-            Arm_Claw_Control.wristIncrement(0.01);
+        if (gamepad2.b){
+            Arm_Claw_Control.arm1Increment(0.05);
+            Arm_Claw_Control.arm2Increment(0.05);
         }
-        if (gamepad1.b){
-            Arm_Claw_Control.wristDecrement(0.01);
+        if (gamepad2.a){
+            Arm_Claw_Control.arm1Decrement(0.05);
+            Arm_Claw_Control.arm2Decrement(0.05);
         }
+
+//        if (gamepad1.a){
+//            Arm_Claw_Control.wristIncrement(0.01);
+//        }
+//        if (gamepad1.b){
+//            Arm_Claw_Control.wristDecrement(0.01);
+//        }
         
 
+//        if (gamepad2.dpad_left){
+//            Arm_Claw_Control.armMid();
+//        }
+        if (gamepad2.dpad_down){
+            Arm_Claw_Control.armPickUp();
+        }
         if (gamepad2.dpad_left){
-            Arm_Claw_Control.armMid();
+            Arm_Claw_Control.armDeliver();
         }
 
         if (gamepad2.right_trigger > 0.2){
@@ -77,21 +86,39 @@ public class Odyssey_v2 extends LinearOpMode {
             Arm_Claw_Control.clawOpen();
         }
 
-        if (gamepad2.b){
+        if (gamepad2.x){
             Arm_Claw_Control.wristHorizontal();
         }
-        if (gamepad2.a){
+        if (gamepad2.y){
             Arm_Claw_Control.wristVertical1();
         }
-        if (gamepad2.y){
-            Arm_Claw_Control.wristVertical2();
+
+        if (gamepad1.a){
+            Launch_Control.launch();
         }
+
+//        if(gamepad1.a){
+//            hang1.setPower(1);
+//            hang2.setPower(-1);
+//        }else{
+//            hang1.setPower(0);
+//            hang2.setPower(0);
+//        }
+//        if(gamepad1.b){
+//            hang1.setPower(-1);
+//            hang2.setPower(1);
+//        }else{
+//            hang1.setPower(0);
+//            hang2.setPower(0);
+//        }
 
 
         telemetry.addData("wrist", Arm_Claw_Control.wrist.getPosition());
         telemetry.addData("arm1", Arm_Claw_Control.arm1.getPosition());
         telemetry.addData("arm2", Arm_Claw_Control.arm2.getPosition());
         telemetry.addData("slide", Slide_Control.slide.getCurrentPosition());
+//        telemetry.addData("hang1", hang1.getCurrentPosition());
+//        telemetry.addData("hang2", hang2.getCurrentPosition());
         telemetry.update();
 
     }
@@ -133,6 +160,8 @@ public class Odyssey_v2 extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
         rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
         spinTake = hardwareMap.get(DcMotorEx.class, "spinTake");
+//        hang1 = hardwareMap.get(DcMotorEx.class, "hang1");
+//        hang2 = hardwareMap.get(DcMotorEx.class, "hang2");
 
         Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
         Slide_Control = new Slide_Control(hardwareMap);
@@ -142,20 +171,27 @@ public class Odyssey_v2 extends LinearOpMode {
         rightFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         leftBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        hang1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        hang2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spinTake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        hang1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        hang2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+//        hang2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Slide_Control.parent = this;
         Slide_Control.telemetry = this.telemetry;
         Slide_Control.initialize();
-        Slide_Control.power = 0.8;
+        Slide_Control.power = 1;
 
         Arm_Claw_Control.parent = this;
         Arm_Claw_Control.telemetry = this.telemetry;

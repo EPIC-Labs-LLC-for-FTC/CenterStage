@@ -13,8 +13,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Door;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Wrist;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.RedPipe;
 
-@Autonomous(name="Robot: test_gyro_auto", group="test")
+@Autonomous(name="test_gyro_auto", group="test")
 public class test_gyro_auto extends LinearOpMode {
 
     public DcMotor leftFront = null;
@@ -57,11 +58,15 @@ public class test_gyro_auto extends LinearOpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         imu = hardwareMap.get(IMU.class, "imu");
 
+        RedPipe pipeline = new RedPipe(telemetry);
+        pipeline.map(hardwareMap);
+        pipeline.initialize();
+
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
-        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         imu.initialize(new IMU.Parameters(orientationOnRobot));
 
@@ -86,41 +91,30 @@ public class test_gyro_auto extends LinearOpMode {
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
+        waitForStart();
 
-        strafe(DRIVE_SPEED, 30, 0);
+        switch (pipeline.getLocation()){
 
-//        door.close();
-//
-//
-//        wrist.gotoHome();
-//
-//        driveStraight(DRIVE_SPEED, 15, 0);
-//
-//        arm.deliver();
-//        wrist.deliver();
-//
-//
+            case LEFT:
+                driveStraight(DRIVE_SPEED, 15, 0);
+                break;
+
+            case MIDDLE:
+                driveStraight(DRIVE_SPEED, 20, 0);
+                break;
+
+            case RIGHT:
+                driveStraight(DRIVE_SPEED, 30, 0);
+                break;
+        }
+
+//        strafe(DRIVE_SPEED, 30, 0);
 //        turnToHeading( TURN_SPEED, 90);
 //        holdHeading( TURN_SPEED, 90, 0.3);
-//
-//        driveStraight(DRIVE_SPEED, -25, 0);
-//        sleep(200);
-//
-//        door.open();
-//        sleep(500);
-//
-//        driveStraight(DRIVE_SPEED, 5, 0);
-//        sleep(200);
-//
-//        strafe(DRIVE_SPEED, 10, 0);
-//        sleep(200);
-//
-//        driveStraight(DRIVE_SPEED, -20, 0);
-//        sleep(500);
-//
-//        telemetry.addData("Path", "Complete");
-//        telemetry.update();
-//        sleep(100);
+
+        telemetry.addData("Path", "Complete");
+        telemetry.update();
+        sleep(100);
     }
     public void driveStraight(double maxDriveSpeed, double distance, double heading) {
         if (opModeIsActive()) {
@@ -181,7 +175,7 @@ public class test_gyro_auto extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         maxStrafeSpeed = Math.abs(maxStrafeSpeed);
-        moveRobot(maxStrafeSpeed, 0.95);
+        moveRobot(maxStrafeSpeed, 0);
 
         while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
 

@@ -23,7 +23,7 @@ public class Slide_Control {
 
     public int deliverPos = 0;
 
-    public int pickUpPos = -143;
+    public int pickUpPos = 0;
 
     public Slide_Control(HardwareMap hardwareMap) {slide = hardwareMap.get(DcMotorEx.class, "slide");}
 
