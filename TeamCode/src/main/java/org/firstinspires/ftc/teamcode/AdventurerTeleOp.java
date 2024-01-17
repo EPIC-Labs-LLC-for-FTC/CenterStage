@@ -69,7 +69,7 @@ public class AdventurerTeleOp extends LinearOpMode {
 
         // if(gamepad2.a) {
         //  arm.setTargetPosition(1047);
-        //  arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //  arm.setMode(DcMotor.RunMode.RUN_TO_POSITION); ,,,,
         //    arm.setPower(1);
         // } else if(gamepad2.x) {
         //    arm.setTargetPosition(-90);
