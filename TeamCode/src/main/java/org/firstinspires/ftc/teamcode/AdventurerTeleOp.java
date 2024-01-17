@@ -81,15 +81,15 @@ public class AdventurerTeleOp extends LinearOpMode {
         //    arm.setPower(1);
         // }
 
-        if (gamepad2.x) {
+        if (gamepad2.a) {
             armServo.setPosition(1);
-        } else if (gamepad2.y) {
+        } else if (gamepad2.b) {
             armServo.setPosition(0);
         }
 
-        if (gamepad2.a) {
+        if (gamepad2.x) {
             wristServo.setPosition(1);
-        } else if (gamepad2.b) {
+        } else if (gamepad2.y) {
             wristServo.setPosition(0);
         }
     }
