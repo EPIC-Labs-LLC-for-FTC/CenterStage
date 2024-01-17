@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @TeleOp()
 public class AdventurerTeleOp extends LinearOpMode {
@@ -16,10 +17,12 @@ public class AdventurerTeleOp extends LinearOpMode {
     public DcMotorEx rightFront = null;
     public DcMotorEx leftBack = null;
     public DcMotorEx  rightBack = null;
-   // public DcMotorEx spintake = null;
+    public DcMotorEx spintake = null;
     public DcMotorEx arm = null;
 
-    public Servo servo;
+    public Servo droneServo = null;
+    public Servo armServo = null;
+    public Servo wristServo = null;
 
     double movement;
     double rotation;
@@ -56,27 +59,46 @@ public class AdventurerTeleOp extends LinearOpMode {
     }
 
     public void armLift() {
-        if(gamepad2.a) {
-            arm.setTargetPosition(0);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if (gamepad2.right_bumper) {
             arm.setPower(1);
-        } else if(gamepad2.x) {
-            arm.setTargetPosition(1000);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(1);
-        } else if(gamepad2.y) {
-            arm.setTargetPosition(3500);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            arm.setPower(1);
+        } else if (gamepad2.left_bumper) {
+            arm.setPower(-1);
+        } else {
+            arm.setPower(0);
         }
 
+        // if(gamepad2.a) {
+        //  arm.setTargetPosition(1047);
+        //  arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //    arm.setPower(1);
+        // } else if(gamepad2.x) {
+        //    arm.setTargetPosition(-90);
+        //    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //   arm.setPower(1);
+        // } else if(gamepad2.y) {
+        //    arm.setTargetPosition(-3525);
+        //    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //    arm.setPower(1);
+        // }
+
+        if (gamepad2.x) {
+            armServo.setPosition(1);
+        } else if (gamepad2.y) {
+            armServo.setPosition(0);
+        }
+
+        if (gamepad2.a) {
+            wristServo.setPosition(1);
+        } else if (gamepad2.b) {
+            wristServo.setPosition(0);
+        }
     }
 
     public void droneControl() {
 
         if (gamepad2.dpad_up) {
-            servo.setDirection(Servo.Direction.FORWARD);
-            servo.setPosition(1);
+           droneServo.setDirection(Servo.Direction.FORWARD);
+           droneServo.setPosition(1);
         }
 
     }
@@ -89,11 +111,10 @@ public class AdventurerTeleOp extends LinearOpMode {
         rightFront = hardwareMap.get(DcMotorEx.class, "frontRight");
         leftBack = hardwareMap.get(DcMotorEx.class, "backLeft");
         rightBack = hardwareMap.get(DcMotorEx.class, "backRight");
-        servo=hardwareMap.get(Servo.class,"servo");
+       droneServo = hardwareMap.get(Servo.class, "droneServo");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
-
-
-
+        armServo = hardwareMap.get(Servo.class, "armServo");
+        wristServo = hardwareMap.get(Servo.class, "wristServo");
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
