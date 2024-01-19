@@ -10,12 +10,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import java.util.ArrayList;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control;
+import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control;
 
-@Autonomous(name="test_gyro_auto", group="test")
-public class test_gyro_auto extends LinearOpMode {
+@Autonomous(name="Odyssey_Blue_Left", group="Odyssey")
+public class Odyssey_Blue_Left extends LinearOpMode {
 
     public DcMotor leftFront = null;
+
     public DcMotor rightFront = null;
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
@@ -41,11 +43,14 @@ public class test_gyro_auto extends LinearOpMode {
     double WHEEL_DIAMETER_INCHES = 3.779528 ;
     double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    double DRIVE_SPEED = 1;
-    double TURN_SPEED = 1;
+    double DRIVE_SPEED = 0.5;
+    double TURN_SPEED = 0.5;
     double HEADING_THRESHOLD = 1;
     double P_TURN_GAIN = 0.1;
     double P_DRIVE_GAIN = 0.1;
+
+    org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control Slide_Control = null;
+    org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control Arm_Claw_Control = null;
 
     @Override
     public void runOpMode() {
@@ -54,6 +59,18 @@ public class test_gyro_auto extends LinearOpMode {
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         imu = hardwareMap.get(IMU.class, "imu");
+
+        Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
+        Slide_Control = new Slide_Control(hardwareMap);
+
+        Slide_Control.parent = this;
+        Slide_Control.telemetry = this.telemetry;
+        Slide_Control.initialize();
+        Slide_Control.power = 1;
+
+        Arm_Claw_Control.parent = this;
+        Arm_Claw_Control.telemetry = this.telemetry;
+        Arm_Claw_Control.initialize();
 
         leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -76,6 +93,15 @@ public class test_gyro_auto extends LinearOpMode {
         while (opModeInInit()) {
             telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
             telemetry.update();
+
+            Slide_Control.parent = this;
+            Slide_Control.telemetry = this.telemetry;
+            Slide_Control.initialize();
+            Slide_Control.power = 1;
+
+            Arm_Claw_Control.parent = this;
+            Arm_Claw_Control.telemetry = this.telemetry;
+            Arm_Claw_Control.initialize();
         }
 
         leftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -86,15 +112,36 @@ public class test_gyro_auto extends LinearOpMode {
 
         waitForStart();
 
-        driveStraight(1, 13, 0);
-        spline(1,9.5,90,3);
-        driveStraight(1, -35, 90);
+//        driveStraight(DRIVE_SPEED, 35, 0);
+//        sleep(800);
+//        turnToHeading( TURN_SPEED, 270);
+//        holdHeading( TURN_SPEED, 270, 0.47);
+//        sleep(800);
+//        driveStraight(DRIVE_SPEED, -40, 270);
 
-//        turnToHeading( 1, 90);
-//        holdHeading( 1, 90, 0.5);
-//        strafe(1, 15, 0);
-//        strafespline(1,10,0,5);
+//        Arm_Claw_Control.armMid();
+//        sleep(800);
+//        Slide_Control.deliver();
+//        sleep(800);
+//        Arm_Claw_Control.armDeliver();
+//        sleep(800);
+//        driveStraight(DRIVE_SPEED, -36, -180);
+//        sleep(2000);
+//        Arm_Claw_Control.clawOpen();
+//        sleep(800);
+//        driveStraight(DRIVE_SPEED, 5, -180);
+//        sleep(800);
+//        Arm_Claw_Control.armMid();
+//        sleep(800);
+        strafe(DRIVE_SPEED, 50, 0);
+//        sleep(800);
+//        driveStraight(DRIVE_SPEED, -13, -180);
 
+        telemetry.addData("wrist", Arm_Claw_Control.wrist.getPosition());
+        telemetry.addData("arm1", Arm_Claw_Control.arm1.getPosition());
+        telemetry.addData("arm2", Arm_Claw_Control.arm2.getPosition());
+        telemetry.addData("slide", Slide_Control.slide.getCurrentPosition());
+        telemetry.update();
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -178,93 +225,6 @@ public class test_gyro_auto extends LinearOpMode {
 
     }
 
-    public void spline(double maxStrafeSpeed, double distance, double heading, double curvature) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        leftFrontTarget = leftFront.getCurrentPosition() - moveCounts;
-        rightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
-        leftBackTarget = leftBack.getCurrentPosition() - moveCounts;
-        rightBackTarget = rightBack.getCurrentPosition() + moveCounts;
-
-        double curveAdjustment = curvature * moveCounts;
-        leftFrontTarget += curveAdjustment;
-        rightFrontTarget += curveAdjustment;
-        leftBackTarget += curveAdjustment;
-        rightBackTarget += curveAdjustment;
-
-        leftFront.setTargetPosition(leftFrontTarget);
-        rightFront.setTargetPosition(rightFrontTarget);
-        leftBack.setTargetPosition(leftBackTarget);
-        rightBack.setTargetPosition(rightBackTarget);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        maxStrafeSpeed = Math.abs(maxStrafeSpeed);
-
-        moveRobot(maxStrafeSpeed, 0);
-
-        while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
-            turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
-
-            moveRobot(maxStrafeSpeed, turnSpeed);
-
-            sendTelemetry(true);
-        }
-
-        moveRobot(0, 0);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void strafespline(double maxStrafeSpeed, double distance, double heading, double curvature) {
-        int moveCounts = (int) (distance * COUNTS_PER_INCH);
-
-        leftFrontTarget = leftFront.getCurrentPosition() - moveCounts;
-        rightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
-        leftBackTarget = leftBack.getCurrentPosition() + moveCounts;
-        rightBackTarget = rightBack.getCurrentPosition() - moveCounts;
-
-        double curveAdjustment = curvature * moveCounts;
-        leftFrontTarget -= curveAdjustment;
-        rightFrontTarget += curveAdjustment;
-        leftBackTarget += curveAdjustment;
-        rightBackTarget -= curveAdjustment;
-
-        leftFront.setTargetPosition(leftFrontTarget);
-        rightFront.setTargetPosition(rightFrontTarget);
-        leftBack.setTargetPosition(leftBackTarget);
-        rightBack.setTargetPosition(rightBackTarget);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        maxStrafeSpeed = Math.abs(maxStrafeSpeed);
-
-        moveRobot(maxStrafeSpeed, 0);
-
-        while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
-            turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
-
-            moveRobot(maxStrafeSpeed, turnSpeed);
-
-            sendTelemetry(true);
-        }
-
-        moveRobot(0, 0);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
 
     public void turnToHeading(double maxTurnSpeed, double heading) {
 

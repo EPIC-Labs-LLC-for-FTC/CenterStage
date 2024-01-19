@@ -33,7 +33,7 @@ public class Arm_Claw_Control {
         wrist.setPosition(0.06);
         arm1.setPosition(1);
         arm2.setPosition(0);
-        claw1.setPosition(0) ;
+        claw1.setPosition(0);
         claw2.setPosition(1);
 
     }
@@ -120,29 +120,17 @@ public class Arm_Claw_Control {
 
     }
 
-    public void wristVertical1() {
+    public void wristVertical() {
         wrist.setPosition(0.28);
         parent.sleep(100);
 
     }
 
-//    public void wristVertical2() {
-//        wrist.setPosition(0.52);
-//        parent.sleep(100);
-//
-//    }
-
-//    public void armMid() {
-//        arm1.setPosition(0.97);
-//        arm2.setPosition(0.03);
-//        parent.sleep(100);
-//    }
-
-//    public void armMid2() {
-//        arm1.setPosition(0.97);
-//        arm2.setPosition(0.03);
-//        parent.sleep(100);
-//    }
+    public void armMid() {
+        arm1.setPosition(0.94);
+        arm2.setPosition(0.06);
+        parent.sleep(200);
+    }
 
     public void armPickUp() {
         arm1.setPosition(0.99);

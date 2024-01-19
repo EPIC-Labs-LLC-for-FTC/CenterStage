@@ -21,7 +21,7 @@ public class Launch_Control {
 
 
     public void launch() {
-        air.setPosition(0.5);
+        air.setPosition(1);
         parent.sleep(100);
     }
 }
