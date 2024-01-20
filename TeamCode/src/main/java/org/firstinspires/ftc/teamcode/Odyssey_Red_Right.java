@@ -98,19 +98,24 @@ public class Odyssey_Red_Right extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+
+        Slide_Control.parent = this;
+        Slide_Control.telemetry = this.telemetry;
+        Slide_Control.initialize();
+        Slide_Control.power = 1;
+
+        Arm_Claw_Control.parent = this;
+        Arm_Claw_Control.telemetry = this.telemetry;
+        Arm_Claw_Control.initialize();
+        String location = odyssey_RedPipe.getLocation();
+        telemetry.addData("location from opmode", location);
+
         while (opModeInInit()) {
             telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
             telemetry.update();
-
-            Slide_Control.parent = this;
-            Slide_Control.telemetry = this.telemetry;
-            Slide_Control.initialize();
-            Slide_Control.power = 1;
-
-            Arm_Claw_Control.parent = this;
-            Arm_Claw_Control.telemetry = this.telemetry;
-            Arm_Claw_Control.initialize();
-
+            location = odyssey_RedPipe.getLocation();
+            telemetry.addData("location from opmode", location);
+            telemetry.update();
         }
 
         leftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -119,8 +124,9 @@ public class Odyssey_Red_Right extends LinearOpMode {
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
+        location = odyssey_RedPipe.getLocation();
+        sleep(500);
         waitForStart();
-        String location = odyssey_RedPipe.getLocation();
         telemetry.addData("location from opmode", location);
         if (location == "RIGHT"){
                 driveStraight(1, 13, 0);
