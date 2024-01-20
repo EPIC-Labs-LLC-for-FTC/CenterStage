@@ -120,18 +120,17 @@ public class Odyssey_Red_Right extends LinearOpMode {
         imu.resetYaw();
 
         waitForStart();
-
-        switch (odyssey_RedPipe.getLocation()){
-
-            case "RIGHT":
+        String location = odyssey_RedPipe.getLocation();
+        telemetry.addData("location from opmode", location);
+        if (location == "RIGHT"){
                 driveStraight(1, 13, 0);
-                break;
+        }
 
-            case "MIDDLE":
-                driveStraight(1,20,0);
-                break;
+        else if (location == "MIDDLE") {
+            driveStraight(1, 20, 0);
+        }
 
-            case "LEFT":
+        else if (location == "LEFT") {
                 driveStraight(1, 13, 0);
                 spline(1,9.5,90,3);
                 driveStraight(1, -35, 90);

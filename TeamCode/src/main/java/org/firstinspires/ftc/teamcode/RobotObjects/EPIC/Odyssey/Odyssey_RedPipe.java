@@ -119,8 +119,6 @@ public class Odyssey_RedPipe extends OpenCvPipeline {
             retval = "MIDDLE";
         else if(location==Location.RIGHT)
             retval = "RIGHT";
-        else
-            retval = "NONE";
         return retval;
     }
 }
