@@ -53,7 +53,7 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
     org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control Slide_Control = null;
     org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control Arm_Claw_Control = null;
-    org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Odyssey_RedPipe Odyssey_RedPipe = null;
+    org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Odyssey_RedPipe odyssey_RedPipe = null;
 
 
     @Override
@@ -66,7 +66,8 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
         Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
         Slide_Control = new Slide_Control(hardwareMap);
-        Odyssey_RedPipe = new Odyssey_RedPipe(hardwareMap);
+        odyssey_RedPipe = new Odyssey_RedPipe(telemetry);
+        odyssey_RedPipe.map(hardwareMap);
 
         Slide_Control.parent = this;
         Slide_Control.telemetry = this.telemetry;
@@ -108,8 +109,8 @@ public class Odyssey_Red_Right extends LinearOpMode {
             Arm_Claw_Control.telemetry = this.telemetry;
             Arm_Claw_Control.initialize();
 
-            Odyssey_RedPipe Odyssey_RedPipe = new Odyssey_RedPipe(telemetry);
-            Odyssey_RedPipe.initialize();
+
+            odyssey_RedPipe.initialize();
         }
 
         leftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -120,7 +121,7 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
         waitForStart();
 
-        switch (Odyssey_RedPipe.getLocation()){
+        switch (odyssey_RedPipe.getLocation()){
 
             case RIGHT:
                 driveStraight(1, 13, 0);
