@@ -123,15 +123,15 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
         switch (odyssey_RedPipe.getLocation()){
 
-            case RIGHT:
+            case "RIGHT":
                 driveStraight(1, 13, 0);
                 break;
 
-            case MIDDLE:
+            case "MIDDLE":
                 driveStraight(1,20,0);
                 break;
 
-            case LEFT:
+            case "LEFT":
                 driveStraight(1, 13, 0);
                 spline(1,9.5,90,3);
                 driveStraight(1, -35, 90);
