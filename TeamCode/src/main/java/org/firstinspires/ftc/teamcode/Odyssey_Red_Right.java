@@ -66,8 +66,10 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
         Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
         Slide_Control = new Slide_Control(hardwareMap);
+
         odyssey_RedPipe = new Odyssey_RedPipe(telemetry);
         odyssey_RedPipe.map(hardwareMap);
+        odyssey_RedPipe.initialize();
 
         Slide_Control.parent = this;
         Slide_Control.telemetry = this.telemetry;
@@ -109,8 +111,6 @@ public class Odyssey_Red_Right extends LinearOpMode {
             Arm_Claw_Control.telemetry = this.telemetry;
             Arm_Claw_Control.initialize();
 
-
-            odyssey_RedPipe.initialize();
         }
 
         leftFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
