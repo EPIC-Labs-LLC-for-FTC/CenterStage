@@ -86,10 +86,10 @@ public class test_gyro_auto extends LinearOpMode {
 
         waitForStart();
 
-        driveStraight(1, 13, 0);
-        spline(1,9.5,90,3);
-        driveStraight(1, -35, 90);
-
+//        driveStraight(1, 13, 0);
+//        spline(1,9.5,90,3);
+//        driveStraight(1, -35, 90);
+        strafespline(1,10,90,5);
 //        turnToHeading( 1, 90);
 //        holdHeading( 1, 90, 0.5);
 //        strafe(1, 15, 0);
@@ -231,10 +231,10 @@ public class test_gyro_auto extends LinearOpMode {
         rightBackTarget = rightBack.getCurrentPosition() - moveCounts;
 
         double curveAdjustment = curvature * moveCounts;
-        leftFrontTarget -= curveAdjustment;
+        leftFrontTarget += curveAdjustment;
         rightFrontTarget += curveAdjustment;
         leftBackTarget += curveAdjustment;
-        rightBackTarget -= curveAdjustment;
+        rightBackTarget += curveAdjustment;
 
         leftFront.setTargetPosition(leftFrontTarget);
         rightFront.setTargetPosition(rightFrontTarget);
@@ -265,6 +265,48 @@ public class test_gyro_auto extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
+    public void diagonalStrafe(double maxStrafeSpeed, double distance, double heading, boolean forward) {
+        int moveCounts = (int) (distance * COUNTS_PER_INCH);
+
+        if (forward) {
+            leftFrontTarget = leftFront.getCurrentPosition() - moveCounts;
+            rightBackTarget = rightBack.getCurrentPosition() + moveCounts;
+        } else {
+            leftBackTarget = leftBack.getCurrentPosition() - moveCounts;
+            rightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
+        }
+
+        leftFront.setTargetPosition(leftFrontTarget);
+        rightFront.setTargetPosition(rightFrontTarget);
+        leftBack.setTargetPosition(leftBackTarget);
+        rightBack.setTargetPosition(rightBackTarget);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        maxStrafeSpeed = Math.abs(maxStrafeSpeed);
+
+        moveRobot(maxStrafeSpeed, 0);
+
+        while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
+            turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+
+            moveRobot(maxStrafeSpeed, turnSpeed);
+
+            sendTelemetry(true);
+        }
+
+        moveRobot(0, 0);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
 
     public void turnToHeading(double maxTurnSpeed, double heading) {
 
