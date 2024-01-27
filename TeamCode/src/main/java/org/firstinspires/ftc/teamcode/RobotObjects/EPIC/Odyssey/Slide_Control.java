@@ -21,7 +21,7 @@ public class Slide_Control {
 
     public double power = 0.0;
 
-    public int deliverPos = -2000;
+    public int deliverPos = -1500;
 
     public int pickUpPos = 0;
 

@@ -89,10 +89,9 @@ public class test_gyro_auto extends LinearOpMode {
 //        driveStraight(1, 13, 0);
 //        spline(1,9.5,90,3);
 //        driveStraight(1, -35, 90);
-        strafespline(1,10,90,5);
 //        turnToHeading( 1, 90);
 //        holdHeading( 1, 90, 0.5);
-//        strafe(1, 15, 0);
+        strafe(1, 15, 0);
 //        strafespline(1,10,0,5);
 
 

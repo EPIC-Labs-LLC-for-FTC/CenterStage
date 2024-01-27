@@ -53,7 +53,7 @@ public class Odyssey_RedPipe extends OpenCvPipeline {
             }
         });
     }
-    private Location location;
+    public Location location;
     static final Rect BMiddle = new Rect(
             new Point(10, 170),
             new Point(250, 300));
@@ -111,14 +111,12 @@ public class Odyssey_RedPipe extends OpenCvPipeline {
         Imgproc.rectangle(mat,BMiddle, location == Location.MIDDLE? True :False);
         return mat;
     }
-    public String getLocation(){
-        String retval = "";
-        if(location==Location.LEFT)
-            retval = "LEFT";
-        else if(location==Location.MIDDLE)
-            retval = "MIDDLE";
-        else if(location==Location.RIGHT)
-            retval = "RIGHT";
-        return retval;
+    public String getLocation() {
+        if (location == Location.RIGHT)
+            return "RIGHT";
+        else if (location == Location.MIDDLE)
+            return "MIDDLE";
+        else //if (location == Location.RIGHT)
+            return "LEFT";
     }
 }

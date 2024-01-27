@@ -11,15 +11,12 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control;
-import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Odyssey_RedPipe;
 import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control;
-import org.firstinspires.ftc.teamcode.RobotObjects.EPIC.RedPipe;
 
 @Autonomous(name="Odyssey_Red_Right", group="Odyssey")
 public class Odyssey_Red_Right extends LinearOpMode {
 
     public DcMotor leftFront = null;
-
     public DcMotor rightFront = null;
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
@@ -53,11 +50,10 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
     org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Slide_Control Slide_Control = null;
     org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Arm_Claw_Control Arm_Claw_Control = null;
-    org.firstinspires.ftc.teamcode.RobotObjects.EPIC.Odyssey.Odyssey_RedPipe odyssey_RedPipe = null;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
@@ -66,10 +62,6 @@ public class Odyssey_Red_Right extends LinearOpMode {
 
         Arm_Claw_Control = new Arm_Claw_Control(hardwareMap);
         Slide_Control = new Slide_Control(hardwareMap);
-
-        odyssey_RedPipe = new Odyssey_RedPipe(telemetry);
-        odyssey_RedPipe.map(hardwareMap);
-        odyssey_RedPipe.initialize();
 
         Slide_Control.parent = this;
         Slide_Control.telemetry = this.telemetry;
@@ -107,14 +99,9 @@ public class Odyssey_Red_Right extends LinearOpMode {
         Arm_Claw_Control.parent = this;
         Arm_Claw_Control.telemetry = this.telemetry;
         Arm_Claw_Control.initialize();
-        String location = odyssey_RedPipe.getLocation();
-        telemetry.addData("location from opmode", location);
 
         while (opModeInInit()) {
             telemetry.addData(">", "Robot Heading = %4.0f", getHeading());
-            telemetry.update();
-            location = odyssey_RedPipe.getLocation();
-            telemetry.addData("location from opmode", location);
             telemetry.update();
         }
 
@@ -124,24 +111,25 @@ public class Odyssey_Red_Right extends LinearOpMode {
         rightBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         imu.resetYaw();
 
-        location = odyssey_RedPipe.getLocation();
-        sleep(500);
         waitForStart();
-        telemetry.addData("location from opmode", location);
-        if (location == "RIGHT"){
-                driveStraight(1, 13, 0);
-        }
 
-        else if (location == "MIDDLE") {
-            driveStraight(1, 20, 0);
-        }
-
-        else if (location == "LEFT") {
-                driveStraight(1, 13, 0);
-                spline(1,9.5,90,3);
-                driveStraight(1, -35, 90);
-        }
-
+        driveStraight(1, 12, 0);
+        spline(1,9,90,5);
+        Arm_Claw_Control.armMid();
+        sleep(200);
+        Slide_Control.deliver();
+        sleep(200);
+        Arm_Claw_Control.armDeliver();
+        driveStraight(1, -41.5, 90);
+        Arm_Claw_Control.clawOpen();
+        sleep(1500);
+        strafe(1,-20,90);
+        sleep(200);
+        driveStraight(1,4,90);
+        sleep(200);
+        Arm_Claw_Control.armPickUp();
+        sleep(800);
+        Slide_Control.pickUp();
 
         telemetry.addData("wrist", Arm_Claw_Control.wrist.getPosition());
         telemetry.addData("arm1", Arm_Claw_Control.arm1.getPosition());
@@ -195,49 +183,51 @@ public class Odyssey_Red_Right extends LinearOpMode {
     }
 
     public void strafe(double maxStrafeSpeed, double distance, double heading) {
-        int moveCounts = (int)(distance * COUNTS_PER_INCH);
-        leftFrontTarget = leftFront.getCurrentPosition() - moveCounts;
-        rightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
-        leftBackTarget = leftBack.getCurrentPosition() + moveCounts;
-        rightBackTarget = rightBack.getCurrentPosition() - moveCounts;
+        if (opModeIsActive()) {
+            int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
-        leftFront.setTargetPosition(leftFrontTarget);
-        rightFront.setTargetPosition(rightFrontTarget);
-        leftBack.setTargetPosition(leftBackTarget);
-        rightBack.setTargetPosition(rightBackTarget);
+            leftFrontTarget = leftFront.getCurrentPosition() + moveCounts;
+            rightFrontTarget = rightFront.getCurrentPosition() - moveCounts;
+            leftBackTarget = leftBack.getCurrentPosition() - moveCounts;
+            rightBackTarget = rightBack.getCurrentPosition() + moveCounts;
 
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftFront.setTargetPosition(leftFrontTarget);
+            rightFront.setTargetPosition(rightFrontTarget);
+            leftBack.setTargetPosition(leftBackTarget);
+            rightBack.setTargetPosition(rightBackTarget);
 
-        maxStrafeSpeed = Math.abs(maxStrafeSpeed);
-        moveRobot(maxStrafeSpeed, 0);
+            leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
+            maxStrafeSpeed = Math.abs(maxStrafeSpeed);
+            moveRobot(0, maxStrafeSpeed);
 
-            turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
+            while (opModeIsActive() && (leftFront.isBusy() && rightFront.isBusy() && leftBack.isBusy() && rightBack.isBusy())) {
+                turnSpeed = getSteeringCorrection(heading, P_DRIVE_GAIN);
 
-            moveRobot(driveSpeed, turnSpeed);
+                moveRobot(0, maxStrafeSpeed + turnSpeed);
 
-            sendTelemetry(true);
+                sendTelemetry(true);
+            }
+
+            moveRobot(0, 0);
+            leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-
-        moveRobot(0, 0);
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
+
 
     public void spline(double maxStrafeSpeed, double distance, double heading, double curvature) {
         int moveCounts = (int) (distance * COUNTS_PER_INCH);
 
         leftFrontTarget = leftFront.getCurrentPosition() - moveCounts;
         rightFrontTarget = rightFront.getCurrentPosition() + moveCounts;
-        leftBackTarget = leftBack.getCurrentPosition() - moveCounts;
-        rightBackTarget = rightBack.getCurrentPosition() + moveCounts;
+        leftBackTarget = leftBack.getCurrentPosition() + moveCounts;
+        rightBackTarget = rightBack.getCurrentPosition() - moveCounts;
 
         double curveAdjustment = curvature * moveCounts;
         leftFrontTarget += curveAdjustment;
