@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 @TeleOp()
@@ -21,8 +22,7 @@ public class AdventurerTeleOp extends LinearOpMode {
     public DcMotorEx arm = null;
 
     public Servo droneServo = null;
-    public Servo armServo = null;
-    public Servo wristServo = null;
+    public CRServo spinServo = null;
 
     double movement;
     double rotation;
@@ -82,15 +82,15 @@ public class AdventurerTeleOp extends LinearOpMode {
         // }
 
         if (gamepad2.a) {
-            armServo.setPosition(1);
+       //     armServo.setPosition(1);
         } else if (gamepad2.b) {
-            armServo.setPosition(0);
+       //     armServo.setPosition(0);
         }
 
         if (gamepad2.x) {
-            wristServo.setPosition(1);
+      //      wristServo.setPosition(1);
         } else if (gamepad2.y) {
-            wristServo.setPosition(0);
+       //     wristServo.setPosition(0);
         }
     }
 
@@ -99,6 +99,18 @@ public class AdventurerTeleOp extends LinearOpMode {
         if (gamepad2.dpad_up) {
            droneServo.setDirection(Servo.Direction.FORWARD);
            droneServo.setPosition(1);
+        }
+
+    }
+
+    public void spinControl() {
+
+        if (gamepad1.dpad_up) {
+            spinServo.setPower(1);
+        } else if (gamepad1.dpad_down) {
+            spinServo.setPower(-1);
+        } else {
+            spinServo.setPower(0);
         }
 
     }
@@ -113,8 +125,7 @@ public class AdventurerTeleOp extends LinearOpMode {
         rightBack = hardwareMap.get(DcMotorEx.class, "backRight");
        droneServo = hardwareMap.get(Servo.class, "droneServo");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
-        armServo = hardwareMap.get(Servo.class, "armServo");
-        wristServo = hardwareMap.get(Servo.class, "wristServo");
+        spinServo = hardwareMap.get(CRServo.class, "spinServo");
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -134,8 +145,7 @@ public class AdventurerTeleOp extends LinearOpMode {
                 telemetry.update();
 
                 driverControl();
-                armLift();
-                droneControl();
+                spinControl();
 
             }
         }
